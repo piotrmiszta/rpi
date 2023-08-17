@@ -1,0 +1,12 @@
+build/
+cmake/
+test_build/
+*.log
+*.txt
+.vscode
+cmake-build-debug/
+.idea/
+description.txt
+client_build/
+build/
+buil/
