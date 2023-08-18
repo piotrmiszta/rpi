@@ -2,7 +2,8 @@ build/
 cmake/
 test_build/
 *.log
-*.txt
+**/*.txt
+!**/CMakeLists.txt
 .vscode
 cmake-build-debug/
 .idea/
