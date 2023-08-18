@@ -6,12 +6,7 @@
 #include <utility.h>
 #include <unistd.h>
 #include <sys/socket.h>
-
-typedef uint16_t payload_size_t;    /** @typedef type to use with payload size */
-typedef uint8_t request_type_t;     /** @typedef type to use with request type*/
-typedef uint8_t message_type_t;     /** @typedef type to use with message type*/
-typedef uint32_t job_t;             /** @typedef type to use with job type */
-
+#include "types.h"
 /**
  * @struct MessageS
 */

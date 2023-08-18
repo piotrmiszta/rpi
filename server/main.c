@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "error_codes.h"
+#include "messages_info_type.h"
 #define VALGRIND
 static inline void main_init(void);
 //static inline void main_destroy(void);
@@ -14,7 +15,6 @@ static ServerS server;
 static void sigint_handler(int sig);
 
 int main(void) {
-
     struct sigaction act = {0};
     act.sa_handler = sigint_handler;
     sigaction(SIGINT, &act, NULL);
