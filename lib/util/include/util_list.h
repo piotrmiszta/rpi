@@ -2,6 +2,7 @@
 #define UTIL_THREAD_LIST_H_
 #include <threads.h>
 #include <utility.h>
+#include "types.h"
 /**
  * @file    util_list.h
  * @brief   implementation of generic doubly linked list
@@ -94,7 +95,7 @@ void* util_list_get_index(ListS* list, size_t index);
  * @param [in] data pointer to data which will be find
  * @return index of finded value or -1 if not find
 */
-long long int util_list_find(ListS* list, void* data);
+index_t util_list_find(ListS* list, void* data);
 /**
  * @brief returning size of list
  * @param [in] list pointer to list

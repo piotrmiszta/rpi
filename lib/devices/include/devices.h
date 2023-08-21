@@ -6,22 +6,66 @@
 #include "types.h"
 
 enum{
-    PROTOCOL_ETH = 0,
-    PROTOCOL_UART = 1,
-    PROTOCOL_USB = 2,
-    PROTOCOL_CUSTOM = 3,
+    PROTOCOL_ETH = 0,   /** @enum Ethernet connection */
+    PROTOCOL_UART = 1,  /** @enum Uart/Usart connection */
+    PROTOCOL_USB = 2,   /** @enum USB connection */
+    PROTOCOL_CUSTOM = 3,/** @enum Other connection */
 };
-
+/**
+ * @brief DeviceS is struct that describes devices connected to source hw
+*/
 typedef struct {
-    device_t fd;
-    protocol_t protocol;
-    Queue* messages;
-    semaphore_t que_empty;
-    semaphore_t que_full;
-    mtx_t mutex;
-    char name[MAX_DEVICE_NAME_LEN];
+    device_t fd;            /** < device descriptor, [id]*/
+    protocol_t protocol;    /** < protocol used to connect to device*/
+    Queue* messages;        /** < que for messages that will be send to device */
+    semaphore_t que_empty;  /** < semaphore for que */
+    semaphore_t que_full;   /** < semaphore for que */
+    mtx_t mutex;            /** < mtx for que */
+    char name[MAX_DEVICE_NAME_LEN]; /** < name for device */
 }DeviceS;
 
+/**
+ * @brief funtion to initialize static variables for devices
+ *
+ * @return error_t: error code
+ *         EDBOOT - for error with list initialize
+ *         SUCCESS - for no errors
+*/
+error_t devices_boot(void);
+
+/**
+ * @brief allocate memory for device and initialize members
+ * @param name device name
+ * @param protocol protocol_t type of protocol
+ * @return pointer to DeviceS
+*/
 DeviceS* devices_create(const char* name, protocol_t protocol);
+
+/**
+ * @brief get device with specified device descriptor
+ * @param fd device descriptor
+ * @return pointer to DeviceS or NULL when not found
+*/
+DeviceS* devices_get(const device_t fd);
+
+/**
+ * @brief add device to list
+ * @return SUCCESS or Error code
+*/
+error_t devices_add(DeviceS* device);
+
+/**
+ * @brief delete device from list
+ * @param fd device descriptor
+ * @return 0 on success or error code
+*/
+error_t device_del(const device_t fd);
+
+/**
+ * @brief check that device is in list
+ * @param fd device descriptor
+ * @return 0 on success or -1 Failure when don;t exsist
+*/
+error_t device_check(const device_t fd);
 
 #endif //DEVICES_H_

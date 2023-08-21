@@ -290,7 +290,7 @@ void* util_list_get_index(ListS* list, size_t index) {
     }
 }
 
-long long int util_list_find(ListS* list, void* data) {
+index_t util_list_find(ListS* list, void* data) {
     if(list) {
         if(list->comp_fun == NULL) {
             return -1;

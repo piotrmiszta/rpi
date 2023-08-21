@@ -29,6 +29,8 @@
 #define ECONN       (-101) /** @def CLIENT CAN'T CONNECT */
 
 
+#define EDBOOT      (-201) /** @def DEVICE CAN'T BOOT */
+#define EDDEL       (-202) /** @def CAN'T DELETE DEVICE*/
 #define assert_ss(cond)   assert(cond) /** @brief use it instead of assert() */
 #define print_err()       strerror(errno) /** @brief generate string with error msg */
 #endif //UTIL_ERRROR_CODES_H_

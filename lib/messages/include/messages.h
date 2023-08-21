@@ -7,17 +7,18 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include "types.h"
+
 /**
  * @struct MessageS
 */
 typedef struct MessageS {
     struct MessageHeaderS{
-        payload_size_t size;        /**< size of payload */
-        message_type_t msg_type;    /**< message type specified by MessageTypeE  */
-        request_type_t req_type;
-        job_t job_type;
+        payload_size_t size;        /** < size of payload */
+        message_type_t msg_type;    /** < message type specified by MessageTypeE  */
+        request_type_t req_type;    /** < request type */
+        job_t job_type;             /** < job type to request type */
     } header;
-    char payload[];                 /**< flexible array with payload */
+    char payload[];                 /** < flexible array with payload */
 }MessageS;
 
 enum {
@@ -55,7 +56,7 @@ void messages_free(MessageS* msg);
  * @param message pointer to MessageS with message that we want to set payload
  * @param payload_in pointer to payload
  * @param size size of payload, its good practice to try always used local payload and setting here sizeof(payload)
- * @return  0 on SUCCESS 
+ * @return  0 on SUCCESS
  *          -1 on failure
 */
 int messages_set_payload(MessageS* message, void* payload_in, payload_size_t size);
@@ -72,7 +73,7 @@ int messages_get_payload(MessageS* message, void* payload_out);
 /**
  * @brief messages_read function is used to read incoming message
  * @param sock socket from we want to read
- * @param err   pointer to int, used to specify error when try to read 
+ * @param err   pointer to int, used to specify error when try to read
  *              can be ETIMEO when timeout is reached, or EREAD on other error set by read() syscall
  *              or 0 on success
  * @return pointer to MessageS with setted payload or NULL pointer when error

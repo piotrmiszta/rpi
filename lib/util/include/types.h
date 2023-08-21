@@ -2,7 +2,8 @@
 #define TYPES_H_
 #include <stdint.h>
 
-
+typedef int32_t error_t;
+typedef long long int index_t;
 typedef uint16_t payload_size_t;    /** @typedef type to use with payload size */
 typedef uint8_t request_type_t;     /** @typedef type to use with request type*/
 typedef uint8_t message_type_t;     /** @typedef type to use with message type*/
