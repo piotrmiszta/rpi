@@ -1,0 +1,48 @@
+<device name="stm32h755re">
+
+    <sensors>
+        <Termometer>
+            <id> 0 </id>
+            <name> Outside </id>
+        </Termometer>
+
+        <Led>
+            <id> 0 </id>
+            <name> Red builtin led </name>
+        </Led>
+        <Led>
+            <id> 1 </id>
+            <name> Green builtin led </name>
+        </Led>
+    </sensors>
+
+    <connectors id="PB13">
+        <description> UART RX </description>
+    </connectors>
+
+    <actions>
+        <id> 0 </id>
+        <name> Turn pin </name>
+        <description> turning pin </description>
+        <param>
+            <id> 0 </id>
+            <name> pin number </name>
+            <type> uint16_t </name>
+        </param>
+        <param>
+            <id> 1 </id>
+            <name> port_number </name>
+            <type> uint16_t </name>
+        </param>
+        <sensor> None </sensor>
+    </actions>
+
+    <actions>
+        <id> 1 </id>
+        <name> Get temp </name>
+        <description> returning current temperature </description>
+        <param> Termometer id </param>
+        <sensor> Termometer </sensor>
+    </actions>
+
+</device>

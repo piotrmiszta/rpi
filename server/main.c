@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "error_codes.h"
 #include "messages_info_type.h"
+#include "devices_boot.h"
 #define VALGRIND
 static inline void main_init(void);
 //static inline void main_destroy(void);
@@ -19,10 +20,11 @@ int main(void) {
     act.sa_handler = sigint_handler;
     sigaction(SIGINT, &act, NULL);
     main_init();
+    devices_boot("/home/Piotr/rpi/files/server/devices/devices.xml");
     server_boot(&server);
 
     #ifdef VALGRIND
-    sleep(20);
+    sleep(10);
     sigint_handler(SIGINT);
     #else
     while(1) {}
@@ -47,10 +49,7 @@ static void sigint_handler(int sig) {
                 "\tDetected Ctrl-C, closing server, deallcate all memory ...\n"
                 "\t---------------------------------------------------------\n");
     server_close(&server);
+    devices_teardown();
     logger_close();
     exit(0);
 }
-
-/*static inline void main_destroy(void) {
-    logger_close();
-}*/

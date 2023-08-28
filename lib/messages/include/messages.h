@@ -33,7 +33,7 @@ enum {
     MESSAGE_REQUEST_INFO = 3,       /** @enum get info about system */
 };
 
-#define PAYLOAD_SIZE_MAX            (1000)  /** @def Maximum size of payload in one msg */
+#define PAYLOAD_SIZE_MAX            (10000)  /** @def Maximum size of payload in one msg */
 #define MSG_SIZE_MAX                (PAYLOAD_SIZE_MAX + sizeof(MessageS))       /** @def maximum size of message (payload + header)*/
 #define MSG_SIZE(payload_size)      \
     ((payload_size_t)payload_size + (payload_size_t)sizeof(MessageS))  /** @def macro to set get message size based on paylolad size*/

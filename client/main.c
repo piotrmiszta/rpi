@@ -13,5 +13,6 @@ int main(int argc, char ** argv) {
     thrd_t thread;
     thrd_create(&thread, connection_start_thread, &args);
     thrd_join(thread, NULL);
+    logger_close();
     return 0;
 }
