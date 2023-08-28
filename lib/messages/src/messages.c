@@ -5,7 +5,7 @@
 
 
 MessageS* messages_alloc(uint16_t size) {
-    assert_ss(size > sizeof(MessageS));
+    assert_ss(size >= sizeof(MessageS));
     assert_ss(size < MSG_SIZE_MAX);
     MessageS* msg = calloc(1, size);
     return msg;
@@ -55,7 +55,7 @@ MessageS* messages_read(const int sock, int* err) {
                 LOG_ERROR("Failed to read msg!!! error: %s", print_err());
                 *err = EREAD;
             }
-            return NULL; 
+            return NULL;
         }
     }
     else {

@@ -17,7 +17,7 @@ typedef struct {
         device_t fd;
     }device[];
 }MessagesJobInfoDeviceS;
-
+#define SIZE_ONE_DEVICE         (sizeof(device_t) + (sizeof(char) * MAX_ACTION_NAME_LEN))
 typedef struct {
     device_t fd;
     struct {

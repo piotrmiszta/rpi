@@ -10,6 +10,8 @@ enum{
     PROTOCOL_UART = 1,  /** @enum Uart/Usart connection */
     PROTOCOL_USB = 2,   /** @enum USB connection */
     PROTOCOL_CUSTOM = 3,/** @enum Other connection */
+    PROTOCOL_USART = 4,
+    PROTOCOL_UNKNOWN = 100 /** @enum Wrong protocol specified*/
 };
 /**
  * @brief DeviceS is struct that describes devices connected to source hw
@@ -31,7 +33,7 @@ typedef struct {
  *         EDBOOT - for error with list initialize
  *         SUCCESS - for no errors
 */
-error_t devices_boot(void);
+error_t devices_create_list(void);
 
 /**
  * @brief allocate memory for device and initialize members
@@ -68,4 +70,9 @@ error_t device_del(const device_t fd);
 */
 error_t device_check(const device_t fd);
 
+size_t device_get_size(void);
+
+DeviceS* devices_get_index(size_t index);
+
+void devices_teardown(void);
 #endif //DEVICES_H_

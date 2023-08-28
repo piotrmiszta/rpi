@@ -31,6 +31,9 @@
 
 #define EDBOOT      (-201) /** @def DEVICE CAN'T BOOT */
 #define EDDEL       (-202) /** @def CAN'T DELETE DEVICE*/
+#define EDXML       (-203) /** @def CAN'T OPEN XML FILE WITH DEVICE DESCRIPTIONS*/
+
+
 #define assert_ss(cond)   assert(cond) /** @brief use it instead of assert() */
 #define print_err()       strerror(errno) /** @brief generate string with error msg */
 #endif //UTIL_ERRROR_CODES_H_

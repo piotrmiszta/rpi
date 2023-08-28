@@ -1,0 +1,21 @@
+<device>
+    <id>1</id>
+    <name>STM32h7</name>
+    <required>No</required>
+    <protocol>UART</protocol>
+    <xml_desc>stm32h7.xml</xml_desc>
+</device>
+<device>
+    <id>2</id>
+    <name>STM32f7</name>
+    <required>No</required>
+    <protocol>UART</protocol>
+    <xml_desc>stm32f7.xml</xml_desc>
+</device>
+<device>
+    <id>3</id>
+    <name>STM32f4</name>
+    <required>No</required>
+    <protocol>UART</protocol>
+    <xml_desc>stm32f4.xml</xml_desc>
+</device>

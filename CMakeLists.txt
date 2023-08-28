@@ -14,9 +14,9 @@ add_subdirectory(client)
 add_subdirectory(server)
 add_subdirectory(lib)
 
+target_link_libraries(server_exe PUBLIC "lib")
 target_link_libraries(server_exe PUBLIC "utility")
 target_link_libraries(server_exe PUBLIC "server_lib")
-target_link_libraries(server_exe PUBLIC "lib")
 
 target_link_libraries(client_exe PUBLIC "utility")
 target_link_libraries(client_exe PUBLIC "lib")
