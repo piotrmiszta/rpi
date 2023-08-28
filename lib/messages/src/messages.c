@@ -29,12 +29,17 @@ int messages_get_payload(MessageS* message, void* payload_out) {
 }
 
 MessageS* messages_read(const int sock, int* err) {
+    *err = SUCCESS;
     payload_size_t payload_size;
     ssize_t recv_val = recv(sock, &payload_size, sizeof(payload_size), MSG_NOSIGNAL);
     uint16_t msg_size = MSG_SIZE(payload_size);
     if(recv_val > 0) {
         /* read */
-
+        if(payload_size > MSG_SIZE_MAX) {
+            LOG_ERROR("Messages is too long! skipping!!!");
+            *err = ELMSG;
+            return NULL;
+        }
         LOG_TRACE("Received size of msg payload_size = %u, msg_size = %u", payload_size, msg_size);
         MessageS* msg = messages_alloc(msg_size);
         assert_ss(msg);
@@ -62,6 +67,7 @@ MessageS* messages_read(const int sock, int* err) {
         if(errno == EAGAIN || errno == EWOULDBLOCK || errno == EINPROGRESS) {
             LOG_WARNING("Timeout reached for message size read, errno = %s", print_err());
             *err = ERTIMO;
+            errno = SUCCESS;
         }
         else {
             LOG_ERROR("Failed to read msg size!!! error: %s", print_err());

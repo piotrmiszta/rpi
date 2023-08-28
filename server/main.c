@@ -20,11 +20,16 @@ int main(void) {
     act.sa_handler = sigint_handler;
     sigaction(SIGINT, &act, NULL);
     main_init();
-    devices_boot("/home/Piotr/rpi/files/server/devices/devices.xml");
-    server_boot(&server);
+    if(devices_boot("/home/Piotr/rpi/files/server/devices/devices.xml")) {
+        sigint_handler(SIGINT);
+    }
+    if(server_boot(&server)) {
+        sigint_handler(SIGINT);
+    }
+
 
     #ifdef VALGRIND
-    sleep(10);
+    sleep(40);
     sigint_handler(SIGINT);
     #else
     while(1) {}

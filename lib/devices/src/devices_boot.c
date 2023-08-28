@@ -5,7 +5,7 @@
 #include "xml_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "devices_thread.h"
 static error_t devices_parse_xml(FILE* file);
 static inline protocol_t devices_get_protocol_from_string(const char* string);
 
@@ -60,6 +60,11 @@ static error_t devices_parse_xml(FILE* file) {
             }
             free(name);
             free(protocol_s);
+            if(thrd_create(&new_device->thread, devices_thread_run, new_device) != thrd_success) {
+                LOG_ERROR("Can't create new thread for %s device", new_device->name);
+                assert_ss("TODO: not implemented yet alternativi" == 0);
+            }
+            LOG_INFO("Thread created!");
         }
     }
     xml_free_node(device);

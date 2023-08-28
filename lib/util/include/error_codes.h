@@ -18,6 +18,7 @@
 #define ELIST       (-6) /** @def ERROR WHEN LISTENING */
 #define EACCT       (-7) /** @def ERROR WHEN ACCEPTING NEW CLIENT */
 #define ESCAD       (-8) /** @def ERRoR WHEN PUSHING CLIENT PARAMS TO LIST */
+#define ELMSG       (-9) /** @def TOO LONG MESSAGE DISCONNECT CLIENT */
 
 #define EREAD       (-14) /** @def ERROR WHEN TRY TO READ */
 #define ERTIMO      (-15) /** @def TIMEOUT REACHED WHEN TRY TO READ */

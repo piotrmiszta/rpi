@@ -22,7 +22,12 @@ int client_connection_start_thread(void* arg) {
                 client->thread_run = false;
                 break;
             }
-            else {
+            else if(loc_errno == ELMSG) {
+                LOG_ERROR("DISCONNECTED FROM SERVER");
+                client->thread_run = false;
+                break;
+            }
+            else  {
                 //reached timeout
                 continue;
             }

@@ -24,6 +24,8 @@ typedef struct {
     semaphore_t que_full;   /** < semaphore for que */
     mtx_t mutex;            /** < mtx for que */
     char name[MAX_DEVICE_NAME_LEN]; /** < name for device */
+    thrd_t thread;
+    bool run;
 }DeviceS;
 
 /**

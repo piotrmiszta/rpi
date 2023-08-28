@@ -37,6 +37,7 @@ DeviceS* devices_create(const char* name, protocol_t protocol) {
     device->protocol = protocol;
     strcpy(device->name, name);
     device->fd = device_get_last_fd() + 1;
+    device->run = true;
     return device;
 }
 #include <stdio.h>
@@ -122,5 +123,13 @@ DeviceS* devices_get_index(size_t index) {
 }
 
 void devices_teardown(void) {
+    size_t nr_devices = util_list_get_size(list);
+    for(size_t i = 0; i < nr_devices; i++) {
+        DeviceS* device = util_list_pop_back(list);
+        device->run = false;
+        //semaphore_post(&device->que_full);
+        thrd_join(device->thread, NULL);
+        device_dealloc(device);
+    }
     util_list_destroy(list);
 }
