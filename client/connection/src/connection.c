@@ -4,8 +4,13 @@
 #include <arpa/inet.h>
 #include <time.h>
 #include "error_codes.h"
+#include "messages_info_type.h"
+#include "messages.h"
+#include <stdlib.h>
+#include <stdio.h>
 static inline int connection_socket(ConnectionArgS* args);
 static inline int connection_connect(ConnectionArgS* args);
+
 int connection_start_thread(void* arg) {
     LOG_INFO("Thread connection started: thread id %lu", thrd_current());
     ConnectionArgS* args = (ConnectionArgS*)(arg);
@@ -21,11 +26,31 @@ int connection_start_thread(void* arg) {
         /* write, read, etc */
         /* we can think about created buffer in args, so we could send pointer to another thread */
         /* and he can easly send message based on this args */
-        char temp[] = "test";
-        uint16_t len = 5;
-        write(args->socket, &len, sizeof(uint16_t));
-        write(args->socket, temp, sizeof(char) * len);
-        thrd_sleep(&(struct timespec){.tv_sec=2}, NULL);
+        int x = 0;
+        printf("Choose request\n");
+        scanf("%d", &x);
+        if(x == 1) {
+            MessageS* message = messages_alloc(MSG_SIZE(0));
+            message->header.job_type = JOB_INFO_DEVICES;
+            message->header.msg_type = MESSAGE_TYPE_REQ;
+            message->header.req_type = MESSAGE_REQUEST_INFO;
+            message->header.size = 0;
+            messages_write(args->socket, message);
+            int err;
+            while(1) {
+                MessageS* msg_out = messages_read(args->socket, &err);
+                if(msg_out) {
+                    MessagesJobInfoDeviceS* device = malloc(msg_out->header.size);
+                    messages_get_payload(msg_out, device);
+                    for(int i = 0 ; i < device->size; i++) {
+                        printf("%d, %s", device->device[i].fd, device->device[i].name);
+                    }
+                    break;
+                }
+
+            }
+
+        }
     }
     return SUCCESS;
 }
