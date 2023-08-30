@@ -23,7 +23,7 @@ int client_connection_start_thread(void* arg) {
                 break;
             }
             else if(loc_errno == ELMSG) {
-                LOG_ERROR("DISCONNECTED FROM SERVER");
+                LOG_ERROR("Disconnect from server client %d", client->sock);
                 client->thread_run = false;
                 break;
             }

@@ -7,7 +7,7 @@
 #include "error_codes.h"
 #include "messages_info_type.h"
 #include "devices_boot.h"
-#define VALGRIND
+#define VALGRINDs
 static inline void main_init(void);
 //static inline void main_destroy(void);
 
@@ -26,7 +26,6 @@ int main(void) {
     if(server_boot(&server)) {
         sigint_handler(SIGINT);
     }
-
 
     #ifdef VALGRIND
     sleep(40);

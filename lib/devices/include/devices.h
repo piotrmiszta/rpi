@@ -2,8 +2,10 @@
 #define DEVICES_H_
 #include <stdint.h>
 #include <utility.h>
+#include <stddef.h>
 #define MAX_DEVICE_NAME_LEN     (20)
 #include "types.h"
+#include "messages.h"
 
 enum{
     PROTOCOL_ETH = 0,   /** @enum Ethernet connection */
@@ -16,16 +18,19 @@ enum{
 /**
  * @brief DeviceS is struct that describes devices connected to source hw
 */
+//TODO: need to optimize this struct for cache lines and padding
 typedef struct {
-    device_t fd;            /** < device descriptor, [id]*/
-    protocol_t protocol;    /** < protocol used to connect to device*/
-    Queue* messages;        /** < que for messages that will be send to device */
-    semaphore_t que_empty;  /** < semaphore for que */
-    semaphore_t que_full;   /** < semaphore for que */
-    mtx_t mutex;            /** < mtx for que */
-    char name[MAX_DEVICE_NAME_LEN]; /** < name for device */
-    thrd_t thread;
-    bool run;
+    device_t fd;                                    /** < device descriptor, [id] */
+    protocol_t protocol;                            /** < protocol used to connect to device */
+    Queue* messages;                                /** < que for messages that will be send to device */
+    semaphore_t que_full;                           /** < semaphore for que */
+    mtx_t mutex;                                    /** < mtx for que */
+    char name[MAX_DEVICE_NAME_LEN];                 /** < name for device */
+    thrd_t thread;                                  /** < thread for menagment connection between device */
+    volatile bool run;                              /** < when true thread is running, when false end thread and disconnected this device */
+    long long int (*write)(int, const MessageS*);   /** < pointer to function to write message depends on protocol */
+    int socket;                                     /** < socket to write/read msgs, if eth socket = eth socket for
+                                                          usart/uart/usb/custom socket will be mapping to corresponding channel */
 }DeviceS;
 
 /**
@@ -72,9 +77,36 @@ error_t device_del(const device_t fd);
 */
 error_t device_check(const device_t fd);
 
+/**
+ * @brief return size of device list
+ * @return size of device list
+*/
 size_t device_get_size(void);
 
+/**
+ * @brief return device of specified index
+ * @param index index of device to return
+ * @return pointer to device from speicified index
+*/
 DeviceS* devices_get_index(size_t index);
 
+/**
+ * @brief destroy list, end all threads for devices
+*/
 void devices_teardown(void);
+
+/**
+ * @brief pop one message from queue
+ * @param device pointer to DeviceS from which we want to pop message
+*/
+struct MessageS* devices_pop_message(DeviceS* device, error_t* err);
+
+/**
+ * @brief push message to queue of message to corresponding device fd
+ * @param message pointer to MessageS* we want to push
+ * @param fd device descriptor
+ * @see DeviceS
+*/
+void devices_push_message(struct MessageS* message, device_t fd);
+
 #endif //DEVICES_H_

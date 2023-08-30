@@ -9,9 +9,30 @@
 
 static ListS* list = NULL;
 
+/**
+ * @brief get device descriptor from last device in list
+ * @return device_t last fd pushed to list
+*/
 static inline device_t device_get_last_fd(void);
+
+/**
+ * @brief function to dealloc device, used to list
+ * @param arg pointer to void* casted from DeviceS*
+*/
 static inline void device_dealloc(void* arg);
+
+/**
+ * @brief function to dealloc message, used to message_que
+ * @param arg pointer to void* casted from MessageS**
+*/
 static inline void device_msg_dealloc(void* arg);
+
+/**
+ * @brief funtion to compare device->fd and fd
+ * @param device_ pointer to void* casted from DeviceS*
+ * @param fd_ pointer to void* casted from device_t*
+ * @return 0 when equal, 1 when device->fd > fd else -1
+*/
 static inline int device_search(void* device_, void* fd_);
 
 error_t devices_create_list(void) {
@@ -32,7 +53,6 @@ DeviceS* devices_create(const char* name, protocol_t protocol) {
     assert_ss(device);
     device->messages = queue_create(device_msg_dealloc);
     mtx_init(&device->mutex, mtx_plain);
-    semaphore_init(&device->que_empty, 10);
     semaphore_init(&device->que_full, 0);
     device->protocol = protocol;
     strcpy(device->name, name);
@@ -103,7 +123,6 @@ static inline int device_search(void* device_, void* fd_) {
 static inline void device_dealloc(void* arg) {
     DeviceS* device = (DeviceS*)arg;
     mtx_destroy(&device->mutex);
-    semaphore_destroy(&device->que_empty);
     semaphore_destroy(&device->que_full);
     queue_destroy(device->messages);
     deallocator(device);
@@ -127,9 +146,30 @@ void devices_teardown(void) {
     for(size_t i = 0; i < nr_devices; i++) {
         DeviceS* device = util_list_pop_back(list);
         device->run = false;
-        //semaphore_post(&device->que_full);
+        semaphore_post(&device->que_full);
         thrd_join(device->thread, NULL);
         device_dealloc(device);
     }
     util_list_destroy(list);
+}
+
+void devices_push_message(MessageS* message, device_t fd) {
+    DeviceS* device = devices_get(fd);
+    assert_ss(device);
+    mtx_lock(&device->mutex);
+    queue_push(device->messages, message);
+    mtx_unlock(&device->mutex);
+    semaphore_post(&device->que_full);
+}
+
+MessageS* devices_pop_message(DeviceS* device, error_t* err) {
+    semaphore_wait(&device->que_full);
+    if(device->run == false) {
+        *err = ETHRD;
+        return NULL;
+    }
+    mtx_lock(&device->mutex);
+    MessageS* message = queue_pop(device->messages);
+    mtx_unlock(&device->mutex);
+    return message;
 }

@@ -6,6 +6,7 @@
 
 MessageS* handle_job_info_device_list(const MessageS* const msg) {
     (void)msg;
+    LOG_DEBUG("Handling job_info_device_list");
     size_t size = device_get_size();
     if(size * SIZE_ONE_DEVICE > PAYLOAD_SIZE_MAX) {
         //TODO: Handling of to big message
@@ -13,6 +14,7 @@ MessageS* handle_job_info_device_list(const MessageS* const msg) {
     payload_size_t payload_size = sizeof(MessagesJobInfoDeviceS) + size * SIZE_ONE_DEVICE;
     MessagesJobInfoDeviceS* device_list = malloc(payload_size);
     assert_ss(device_list);
+    device_list->size = size;
     for(size_t i = 0; i < size; i++) {
         DeviceS* device = devices_get_index(i);
         strcpy(device_list->device[i].name, device->name);

@@ -64,7 +64,7 @@ static error_t devices_parse_xml(FILE* file) {
                 LOG_ERROR("Can't create new thread for %s device", new_device->name);
                 assert_ss("TODO: not implemented yet alternativi" == 0);
             }
-            LOG_INFO("Thread created!");
+            LOG_INFO("Thread for device with fd = %lu created successfully!", new_device->fd);
         }
     }
     xml_free_node(device);

@@ -11,7 +11,7 @@ enum {
 };
 
 typedef struct {
-    client_t fd;
+    uint32_t size;
     struct {
         char name[MAX_DEVICE_NAME_LEN];
         device_t fd;

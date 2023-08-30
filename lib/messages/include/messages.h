@@ -13,8 +13,8 @@
 */
 typedef struct MessageS {
     struct MessageHeaderS{
-        payload_size_t size;        /** < size of payload */
         message_type_t msg_type;    /** < message type specified by MessageTypeE  */
+        payload_size_t size;        /** < size of payload */
         request_type_t req_type;    /** < request type */
         job_t job_type;             /** < job type to request type */
     } header;
@@ -25,6 +25,7 @@ enum {
     MESSAGE_TYPE_REQ = 1,       /** @enum request */
     MESSAGE_TYPE_CFM = 2,       /** @enum confirmation */
     MESSAGE_TYPE_REJ = 3,       /** @enum reject */
+    MESSAGE_TYPE_INTERNAL = 4,  /** @enum internal signal between threads */
 };
 
 enum {

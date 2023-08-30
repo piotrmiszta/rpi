@@ -35,11 +35,17 @@ MessageS* messages_read(const int sock, int* err) {
     uint16_t msg_size = MSG_SIZE(payload_size);
     if(recv_val > 0) {
         /* read */
+        if(payload_size == 0) {
+            LOG_DEBUG("Check message skipping!!!");
+            *err = ECMSG;
+            return NULL;
+        }
         if(payload_size > MSG_SIZE_MAX) {
             LOG_ERROR("Messages is too long! skipping!!!");
             *err = ELMSG;
             return NULL;
         }
+        payload_size--;
         LOG_TRACE("Received size of msg payload_size = %u, msg_size = %u", payload_size, msg_size);
         MessageS* msg = messages_alloc(msg_size);
         assert_ss(msg);
@@ -79,13 +85,14 @@ MessageS* messages_read(const int sock, int* err) {
 
 ssize_t messages_write(int sock, MessageS* msg) {
     assert_ss(msg);
-    ssize_t send_size_val = send(sock, &(msg->header.size), sizeof(msg->header.size), MSG_NOSIGNAL);
+    payload_size_t pay_size = msg->header.size + 1;
+    ssize_t send_size_val = send(sock, &pay_size, sizeof(msg->header.size), MSG_NOSIGNAL);
     if(send_size_val > 0) {
-        LOG_TRACE("Send msg size = %d", msg->header.size);
+        LOG_DEBUG("Send msg size = %d", msg->header.size);
         size_t msg_size = MSG_SIZE(msg->header.size);
         ssize_t send_val = send(sock, msg, msg_size, MSG_NOSIGNAL);
         if( send_val > 0) {
-            LOG_TRACE("Recaived msg size = %d, type = %d, req_type = %d", msg_size,
+            LOG_TRACE("Send msg size = %d, type = %d, req_type = %d", msg_size,
                 msg->header.msg_type,
                 msg->header.req_type);
             return send_val;

@@ -6,7 +6,7 @@ set(CMAKE_C_STANDARD 17)
 #set(CMAKE_C_COMPILER clang)
 #set(CMAKE_C_FLAGS "-Weverything -Wno-declaration-after-statement -Wno-date-time -g -Wno-disabled-macro-expansion -O3")
 enable_testing()
-set(CMAKE_C_FLAGS "-Wall -pedantic -g -Werror -O3 -Wno-non-literal-null-conversion -std=c11")
+set(CMAKE_C_FLAGS "-Wall -pedantic -g3 -Werror -O3 -Wno-non-literal-null-conversion -std=c11")
 add_executable(server_exe server/main.c)
 add_executable(client_exe client/main.c)
 

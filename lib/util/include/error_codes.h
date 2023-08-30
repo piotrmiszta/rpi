@@ -19,7 +19,7 @@
 #define EACCT       (-7) /** @def ERROR WHEN ACCEPTING NEW CLIENT */
 #define ESCAD       (-8) /** @def ERRoR WHEN PUSHING CLIENT PARAMS TO LIST */
 #define ELMSG       (-9) /** @def TOO LONG MESSAGE DISCONNECT CLIENT */
-
+#define ECMSG       (-10) /** @def CHECK MESSAGE */
 #define EREAD       (-14) /** @def ERROR WHEN TRY TO READ */
 #define ERTIMO      (-15) /** @def TIMEOUT REACHED WHEN TRY TO READ */
 
@@ -33,7 +33,7 @@
 #define EDBOOT      (-201) /** @def DEVICE CAN'T BOOT */
 #define EDDEL       (-202) /** @def CAN'T DELETE DEVICE*/
 #define EDXML       (-203) /** @def CAN'T OPEN XML FILE WITH DEVICE DESCRIPTIONS*/
-
+#define ETHRD       (-204) /** @def END THREAD WHEN TRY TO POP MESSAGE */
 
 #define assert_ss(cond)   assert(cond) /** @brief use it instead of assert() */
 #define print_err()       strerror(errno) /** @brief generate string with error msg */
